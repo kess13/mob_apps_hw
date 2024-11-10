@@ -1,0 +1,21 @@
+<resources>
+    <style name="Base.Theme.MyApplicationLast" parent="Theme.Material3.DayNight.NoActionBar">
+
+    </style>
+
+    <style name="Theme.MyApplicationLast" parent="Base.Theme.MyApplicationLast" />
+    <!-- Custom style for filled TextInputLayout -->
+    <style name="CustomFilledTextFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">#E0E0E0</item>
+        <item name="boxStrokeColor">#6200EE</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.CustomFilledCorners</item>
+
+
+    </style>
+    <style name="ShapeAppearance.CustomFilledCorners" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">8dp</item>
+    </style>
+
+
+</resources>
