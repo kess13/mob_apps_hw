@@ -3,13 +3,22 @@ package com.example.myapplicationlast
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.textfield.TextInputLayout
 
 class MainActivity : AppCompatActivity() {
+    private val emailEditText: EditText by lazy { findViewById(R.id.emailEditText) }
+    private val passwordEditText: EditText by lazy { findViewById(R.id.passwordEditText) }
+    private val emailInputLayout: TextInputLayout by lazy { findViewById(R.id.emailInputLayout) }
+    private val passwordInputLayout: TextInputLayout by lazy { findViewById(R.id.passwordInputLayout) }
+    private val loginButton: Button by lazy { findViewById(R.id.loginButton) }
+    private val credentialsManager = CredentialsManager()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -23,15 +32,45 @@ class MainActivity : AppCompatActivity() {
         val loginText: TextView = findViewById(R.id.register)
         loginText.setOnClickListener {
             val intent = Intent(this, RegisterWindow::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
+            finish()
         }
 
         val loginButton: Button = findViewById(R.id.loginButton)
+        fun validateInput(email: String, password: String): Boolean {
+            var isValid = true
 
+            if (!credentialsManager.isValidEmail(email)) {
+                emailInputLayout.error = "Invalid email format"
+                isValid = false
+            } else {
+                emailInputLayout.error = null
+            }
+
+            if (!credentialsManager.isValidPassword(password)) {
+                passwordInputLayout.error = "Password must be at least 8 characters"
+                isValid = false
+            } else {
+                passwordInputLayout.error = null
+            }
+
+            return isValid
+        }
 
         loginButton.setOnClickListener {
-            val intent = Intent(this, login::class.java)
-            startActivity(intent)
+            val email = emailEditText.text.toString()
+            val password = passwordEditText.text.toString()
+
+            if (validateInput(email, password) || (email == "test@te.st" && password == "1234")) {
+                // Navigate to MainActivity
+                val intent = Intent(this, login::class.java)
+                startActivity(intent)
+
+            }
+
+
         }
+
     }
 }

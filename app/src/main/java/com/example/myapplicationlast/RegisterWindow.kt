@@ -21,7 +21,9 @@ class RegisterWindow : AppCompatActivity() {
         val loginText: TextView = findViewById(R.id.register)
         loginText.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
+            finish()
         }
     }
 }

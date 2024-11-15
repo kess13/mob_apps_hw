@@ -2,11 +2,13 @@ package com.example.myapplicationlast
 import android.util.Patterns
 
 class CredentialsManager {
-    fun isEmailValid(email: String): Boolean {
+
+    fun isValidEmail(email: String): Boolean {
         return email.isNotEmpty() && email.contains("@") && email.contains(".")
     }
 
-    fun isPasswordValid(password: String): Boolean {
-        return password.isNotEmpty()
+    fun isValidPassword(password: String): Boolean {
+        return password.isNotEmpty() && password.length >= 8
     }
+
 }
