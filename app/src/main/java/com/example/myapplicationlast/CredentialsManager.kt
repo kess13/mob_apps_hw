@@ -11,4 +11,5 @@ class CredentialsManager {
         return password.isNotEmpty() && password.length >= 8
     }
 
+
 }
