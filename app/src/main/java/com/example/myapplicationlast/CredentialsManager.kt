@@ -11,5 +11,17 @@ class CredentialsManager {
         return password.isNotEmpty() && password.length >= 8
     }
 
+    private val existingUsers = listOf(
+        "user1@gmail.com",
+        "user2@tt.com",
+        "user3@test.com"
+    )
+
+    fun isUserAlreadyRegistered(email: String): Boolean {
+        return existingUsers.contains(email)
+    }
+
 
 }
+
+
