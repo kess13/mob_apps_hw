@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
             if (validateInput(email, password) || (email == "test@te.st" && password == "1234")) {
                 // Navigate to MainActivity
-                val intent = Intent(this, login::class.java)
+                val intent = Intent(this, Login::class.java)
                 startActivity(intent)
 
             }

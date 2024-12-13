@@ -16,7 +16,7 @@
             android:name=".FragmentsActivity"
             android:exported="false" />
         <activity
-            android:name=".login"
+            android:name=".Login"
             android:exported="false" />
         <activity
             android:name=".RegisterWindow"
