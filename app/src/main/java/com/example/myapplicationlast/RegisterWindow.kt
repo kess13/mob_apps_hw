@@ -13,76 +13,82 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.textfield.TextInputLayout
 
 class RegisterWindow : AppCompatActivity() {
+    // Declare EditText and other views
     private val emailEditText: EditText by lazy { findViewById(R.id.emailEditText) }
     private val passwordEditText: EditText by lazy { findViewById(R.id.passwordEditText) }
-    private val phoneEditText: EditText by lazy { findViewById(R.id.phoneEditText) }
+    private val registerButton: Button by lazy { findViewById(R.id.loginButton) }
     private val emailInputLayout: TextInputLayout by lazy { findViewById(R.id.emailInputLayout) }
     private val passwordInputLayout: TextInputLayout by lazy { findViewById(R.id.passwordInputLayout2) }
-    private val phoneInputLayout: TextInputLayout by lazy { findViewById(R.id.phoneInputLayout) }
-    private val registerButton: Button by lazy { findViewById(R.id.loginButton) }
-    private val credentialsManager = CredentialsManager()
+    private val loginText: TextView by lazy { findViewById(R.id.register) }
+
+    // Singleton pattern instance of CredentialsManager to store users for this session
+    private val credentialsManager = CredentialsManager.instance  // Singleton instance for session storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_register_window)
+
+        // Enable edge-to-edge UI (optional visual enhancement)
+        enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        val loginText: TextView = findViewById(R.id.register)
+        // Handle the "Login" link click event
         loginText.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            finish()
+            navigateToLogin() // Navigate to login screen
         }
 
-        // Listener for "Register" button
+        // Handle the Register button click event
         registerButton.setOnClickListener {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
-            val phone = phoneEditText.text.toString()
 
             if (validateInput(email, password)) {
-                Toast.makeText(this, "Registration successful!", Toast.LENGTH_LONG).show()
-
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
-                finish()
+                val result = credentialsManager.register(email, password)
+                Toast.makeText(this, result, Toast.LENGTH_SHORT).show()  // Show result message
+                if (result == "Registration successful.") {
+                    // Log the updated users map for debugging
+                    println("Updated Users Map: ${credentialsManager.getUsers()}")
+                    navigateToLogin() // Redirect to login page after success
+                }
             }
         }
     }
 
-
+    // Function to validate the email and password input
     private fun validateInput(email: String, password: String): Boolean {
         var isValid = true
 
-        // Validate email
+        // Validate email format
         if (!credentialsManager.isValidEmail(email)) {
             emailInputLayout.error = "Invalid email format"
             isValid = false
-        } else {
-            emailInputLayout.error = null
-        }
-        if (credentialsManager.isUserAlreadyRegistered(email)) {
+        } else if (credentialsManager.isUserAlreadyRegistered(email)) {
             emailInputLayout.error = "Email already used"
+            isValid = false
         } else {
-            emailInputLayout.error = null
+            emailInputLayout.error = null  // Clear error if valid
         }
-        // Validate password
+
+        // Validate password length
         if (!credentialsManager.isValidPassword(password)) {
             passwordInputLayout.error = "Password must be at least 8 characters"
             isValid = false
         } else {
-            passwordInputLayout.error = null
+            passwordInputLayout.error = null  // Clear error if valid
         }
 
         return isValid
     }
+
+    // Function to navigate to the login screen
+    private fun navigateToLogin() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
+    }
 }
-
-
