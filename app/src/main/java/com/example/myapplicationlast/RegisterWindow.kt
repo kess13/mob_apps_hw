@@ -64,10 +64,10 @@ class RegisterWindow : AppCompatActivity() {
 
         // Validate email format
         if (!credentialsManager.isValidEmail(email)) {
-            emailInputLayout.error = "Invalid email format"
+            emailInputLayout.error = getString(R.string.error_invalid_email)
             isValid = false
         } else if (credentialsManager.isUserAlreadyRegistered(email)) {
-            emailInputLayout.error = "Email already used"
+            emailInputLayout.error = getString(R.string.error_email_registered)
             isValid = false
         } else {
             emailInputLayout.error = null  // Clear error if valid
@@ -75,7 +75,7 @@ class RegisterWindow : AppCompatActivity() {
 
         // Validate password length
         if (!credentialsManager.isValidPassword(password)) {
-            passwordInputLayout.error = "Password must be at least 8 characters"
+            passwordInputLayout.error = getString(R.string.error_invalid_password)
             isValid = false
         } else {
             passwordInputLayout.error = null  // Clear error if valid
